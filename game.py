@@ -8,6 +8,7 @@ print(figlet_format("Monopoly"))
 
 game_over = False
 all_players = []
+in_jail = []
 num_of_players = 0
 
 # A loop to determine the number of players
@@ -25,28 +26,54 @@ for i in range(1, num_of_players+1):
     player_token = input(f"Enter player {i} token: ")
 
     all_players.append(Players(player_name, player_token))
+    in_jail.append(False)
 
     print(f"\nNew Player {all_players[i-1].name.upper()} created. Your token is a {all_players[i-1].token.upper()}.")
 
 the_banker = input("\nWhich player is the banker? ").lower()
 
+# Loop through the list of players and remove the banker as Player and re-add as
+# Banker
 for player in all_players:
     if player.name.lower() == the_banker:
+        player_index = all_players.index(player)
         banker_token = player.token
         all_players.remove(player)
-        all_players.append(Banker(the_banker, banker_token))
+        all_players.insert(player_index, Banker(the_banker, banker_token))
+        break
 
+
+def view_properties():
+    b = Board()
+    return b.list_properties()
+
+def view_stations():
+    b = Board()
+    return b.list_stations()
+
+def view_utilities():
+    b = Board()
+    return b.list_utilies()
+
+def dice_roll():
+    dye_1 = randint(1, 6)
+    dye_2 = randint(1, 6)
+
+    print(f"You rolled a {dye_1} and {dye_2}. Move {dye_1 + dye_2} spaces.\n")
+
+
+# Continue the game while game_over is set to False
 while game_over is False:
     # Begin game
     for player in all_players:
 
+        # Checks whether the format of money is input correctly
         incorrect_format = True
-        in_jail = False
 
         dice_1 = randint(1, 6)
         dice_2 = randint(1, 6)
         print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
-        print(f"You rolled a {dice_1} and {dice_2}. Move {dice_1 + dice_2} spaces.\n")
+        dice_roll()
         while incorrect_format:
             balance_update = input("Enter how much you have lost/gained: ")
             if "+" in balance_update:
@@ -79,15 +106,4 @@ while game_over is False:
                 print("Example: '+200', '-140'\n")
                 incorrect_format = True
 
-
-def view_properties():
-    b = Board()
-    return b.list_properties()
-
-def view_stations():
-    b = Board()
-    return b.list_stations()
-
-def view_utilities():
-    b = Board()
-    return b.list_utilies()
+            

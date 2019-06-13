@@ -1,3 +1,4 @@
+# the board class that will contain all of the properties, stations and utilities
 class Board:
     def __init__(self):
         self.properties = ["Old Kent Rd",

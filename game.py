@@ -1,6 +1,7 @@
 from pyfiglet import figlet_format
 from players import Players, Banker
 from board import Board
+from dice import Dice
 from random import randint
 from termcolor import colored
 
@@ -55,25 +56,25 @@ def view_utilities():
     b = Board()
     return b.list_utilies()
 
-def dice_roll():
-    dye_1 = randint(1, 6)
-    dye_2 = randint(1, 6)
-
-    print(f"You rolled a {dye_1} and {dye_2}. Move {dye_1 + dye_2} spaces.\n")
-
 
 # Continue the game while game_over is set to False
 while game_over is False:
+
+    DICE = Dice()
+
     # Begin game
     for player in all_players:
 
         # Checks whether the format of money is input correctly
         incorrect_format = True
-
-        dice_1 = randint(1, 6)
-        dice_2 = randint(1, 6)
+        
         print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
-        dice_roll()
+        DICE.roll()
+        #TODO: return to current play if doubles are true
+        while DICE.is_doubles():
+            print(colored(f"\n{player.name.upper()} rolled doubles!", "cyan"))
+            print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
+            break
         while incorrect_format:
             balance_update = input("Enter how much you have lost/gained: ")
             if "+" in balance_update:

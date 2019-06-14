@@ -16,9 +16,7 @@ class Dice:
             
     def is_doubles(self):
         if self.dye_1 == self.dye_2:
-            print("doubles")
             self.doubles = True
             return self.doubles
-        print("not doubles")
         self.doubles = False
         return self.doubles

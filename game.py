@@ -10,6 +10,7 @@ print(figlet_format("Monopoly"))
 game_over = False
 all_players = []
 in_jail = {}
+jail_count = {}
 num_of_players = 0
 
 # A loop to determine the number of players
@@ -42,8 +43,10 @@ for player in all_players:
         all_players.remove(player)
         all_players.insert(player_index, Banker(the_banker, banker_token))
         #break
-    in_jail[player] = False
 
+for player in all_players:
+    in_jail[player] = False
+    jail_count[player] = 0
 
 def view_properties():
     b = Board()
@@ -110,18 +113,40 @@ while game_over is False:
     for player in all_players:
         double_count = 1
         print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
-        DICE.roll()
-        update_player_balance()
-        while DICE.is_doubles(): #DICE.is_doubles()
-            double_count += 1
-            if double_count == 3:
-                print("You rolled doubles 3 times. You are going to jail!")
-                in_jail[player] = True
-                print(in_jail)
+        while in_jail[player] is True:
+            jail_count[player] = jail_count[player] + 1
+            if jail_count[player] == 3:
+                print("You are now released from jail.")
+                jail_count[player] = 0
+                in_jail[player] = False
+                break
+            print("You are in jail. You will need to roll a double to get out or wait until your third turn.")
+            DICE.roll()
+            if DICE.is_doubles():
+                jail_count[player] = 0
+                print("You are now released from jail.")
+                input("Press Enter")
+                break
             else:
-                print(double_count)
-                print(colored(f"\n{player.name.upper()} rolled doubles! They get another turn!", "cyan"))
-                print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
-                DICE.roll()
-                update_player_balance()
-            
+                print("Sorry, you did not roll doubles this time.")
+                input("Press Enter")
+                break
+        if in_jail[player] == False:  
+            DICE.roll()
+            update_player_balance()
+            while DICE.is_doubles(): #DICE.is_doubles()
+                
+                if double_count >= 3:
+                    print(colored("You rolled doubles 3 times. You are going to jail!", "red"))
+                    in_jail[player] = True
+                    break
+                else:
+                    print(double_count)
+                    print(colored(f"\n{player.name.upper()} rolled doubles! They get another turn!", "cyan"))
+                    print(colored(f"\nCurrent player: {player.name.upper()}", "cyan"))
+                    DICE.roll()
+                    double_count += 1
+                    if double_count < 3:
+                        update_player_balance()
+        if DICE.is_doubles():
+            in_jail[player] = False

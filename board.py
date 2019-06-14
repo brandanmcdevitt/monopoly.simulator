@@ -1,4 +1,10 @@
-# the board class that will contain all of the properties, stations and utilities
+class Properties:
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+# the board class that will contain all of the properties, stations and
+# utilities
 class Board:
     def __init__(self):
         self.properties = ["Old Kent Rd",
@@ -23,7 +29,7 @@ class Board:
                            "Bond Street",
                            "Park Lane",
                            "Mayfair"]
-
+        
         self.stations = ["King's Cross Station",
                          "Marylebone Station",
                          "Fenchurch Station",

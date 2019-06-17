@@ -13,6 +13,7 @@ class Dice:
         self.dye_2 = randint(1, 6)
 
         print(f"You rolled a {self.dye_1} and {self.dye_2}. Move {self.dye_1 + self.dye_2} spaces.\n")
+        return self.dye_1 + self.dye_2
             
     def is_doubles(self):
         if self.dye_1 == self.dye_2:
